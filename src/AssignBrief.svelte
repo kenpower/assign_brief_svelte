@@ -1,5 +1,6 @@
 <script>
 import CheckListSelector from "./Components/CheckListSelector.svelte"
+import TreeView from "./Components/TreeView.svelte";
 //import { learner_names, reviewer_names } from './SkillsStore.js';
 //import { skillsTable} from './SkillsStore.js';
 export let learners = [];
@@ -13,6 +14,46 @@ let assignmentType;
 let selected_reviewers = [];
 let selected_learners = [];
 
+
+let treedata = {
+	 text: "root",
+		
+	 items:[
+		 {
+			text: "test",
+			items: [
+				{ text: "subtest" },
+				{ text: "subtest2" },
+				{ text: "subtest3" },
+				{ text: "subtest4", 
+					items: [
+						{ text: "subtest" , selected: false },
+						{ text: "subtest2" },
+						{ text: "subtest3" },
+						{ text: "subtest4" },
+					]
+				},
+			]
+		},
+		{
+			text: "test2",
+			items: [
+				{ text: "subtest" },
+				{ text: "subtest2" },
+				{ text: "subtest3" },
+				{ text: "subtest4" },
+			]
+		},
+		{
+			text: "test3",
+			items: [
+				{ text: "subtest" },
+				{ text: "subtest2" },
+				{ text: "subtest3" , selected: true},
+				{ text: "subtest4" },
+			]
+		}
+]};
 
 let learner_names_sorted = []
 let reviewer_names_sorted = []
@@ -167,7 +208,11 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
 				 <label for="">Checklist items</label>
 					<CheckListSelector {skills}/>
 				</section>
-				
+						<section id="checklist">	
+				 <label for="">Checklist items</label>
+					<TreeView branch = {treedata} itemClass={""} leafClass={""} selectedClass={"blue"}   expandIfDecendantSelected={true} >
+</TreeView>		
+				</section>
    			<input id="submit" type="submit" value="Submit">
 				
 			</form>
@@ -186,4 +231,10 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
 	section > input, section > div{
 		flex-grow: 1;	
 	}
+
+    		:global(.blue){
+			color:blue;
+			font-weight:700;
+		}
+	
 </style>
