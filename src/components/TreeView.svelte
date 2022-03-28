@@ -56,11 +56,6 @@
 	}
 	
  	const canContract = (i) => selectedDecendents.size == 0 || !expandIfDecendantSelected;
-		
-//  	const expandIcon = () => 
-// 				branch.items
-// 				? (branch.expanded ? ChevronDownIcon : ChevronRightIcon)
-// 				: SpacerIcon;
 	
 	 $: expandIcon = () => 
 				branch.items
@@ -97,11 +92,15 @@
 	
 	if(selectedDecendents.size) 
 		branch.expanded = true;
+    
+    if(!showRoot && level == 0)
+    	branch.expanded = true;
+
 	
 </script>
 	{#if shouldShowRoot()}
   <div class={thisItemClasses}  on:click={toggle} >
-				<SVGIcon name={expandIcon()}/> {branch.text} {level}
+				<SVGIcon name={expandIcon()}/> {branch.text}
 	</div>
 	{/if}
 	<div class:sub-group = "{shouldShowRoot()}">

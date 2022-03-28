@@ -6,6 +6,8 @@ import TreeView from "./Components/TreeView.svelte";
 export let learners = [];
 export let reviewers = [];
 export let skills = [];
+export let skillsTree = [];
+
 
 let data = {};
 let brief_title
@@ -15,45 +17,45 @@ let selected_reviewers = [];
 let selected_learners = [];
 
 
-let treedata = {
-	 text: "root",
+// let treedata = {
+// 	 text: "root",
 		
-	 items:[
-		 {
-			text: "test",
-			items: [
-				{ text: "subtest" },
-				{ text: "subtest2" },
-				{ text: "subtest3" },
-				{ text: "subtest4", 
-					items: [
-						{ text: "subtest" , selected: false },
-						{ text: "subtest2" },
-						{ text: "subtest3" },
-						{ text: "subtest4" },
-					]
-				},
-			]
-		},
-		{
-			text: "test2",
-			items: [
-				{ text: "subtest" },
-				{ text: "subtest2" },
-				{ text: "subtest3" },
-				{ text: "subtest4" },
-			]
-		},
-		{
-			text: "test3",
-			items: [
-				{ text: "subtest" },
-				{ text: "subtest2" },
-				{ text: "subtest3" , selected: true},
-				{ text: "subtest4" },
-			]
-		}
-]};
+// 	 items:[
+// 		 {
+// 			text: "test",
+// 			items: [
+// 				{ text: "subtest" },
+// 				{ text: "subtest2" },
+// 				{ text: "subtest3" },
+// 				{ text: "subtest4", 
+// 					items: [
+// 						{ text: "subtest" , selected: false },
+// 						{ text: "subtest2" },
+// 						{ text: "subtest3" },
+// 						{ text: "subtest4" },
+// 					]
+// 				},
+// 			]
+// 		},
+// 		{
+// 			text: "test2",
+// 			items: [
+// 				{ text: "subtest" },
+// 				{ text: "subtest2" },
+// 				{ text: "subtest3" },
+// 				{ text: "subtest4" },
+// 			]
+// 		},
+// 		{
+// 			text: "test3",
+// 			items: [
+// 				{ text: "subtest" },
+// 				{ text: "subtest2" },
+// 				{ text: "subtest3" , selected: true},
+// 				{ text: "subtest4" },
+// 			]
+// 		}
+// ]};
 
 let learner_names_sorted = []
 let reviewer_names_sorted = []
@@ -210,8 +212,8 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
 				</section>
 						<section id="checklist">	
 				 <label for="">Checklist items</label>
-					<TreeView branch = {treedata} itemClass={""} leafClass={""} selectedClass={"blue"}   expandIfDecendantSelected={true} >
-</TreeView>		
+					<TreeView branch = {skillsTree} itemClass={""} leafClass={""} selectedClass={"blue"}   expandIfDecendantSelected={true} >
+                    </TreeView>		
 				</section>
    			<input id="submit" type="submit" value="Submit">
 				

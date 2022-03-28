@@ -7,6 +7,7 @@ let app={};
 let theData = {};
 let loaded=false;
 let skillsHierarchy;
+let skillsTree
 
 let promise = Promise.resolve([]);
 
@@ -47,6 +48,55 @@ function createSkillsHierarchy(skills)
     return skillsHierarchy;
 }
 
+function createSkillsTree(skills)
+{
+    var skillsTree = {
+		text: "areas",
+		items: []
+	};
+    skills.forEach(skillRow=>
+    {
+        var areaName = skillRow[0];
+        var areaId = getValidId(areaName);
+
+        var skillName = skillRow[1];
+        var skillId = getValidId(skillName);
+
+        var checklistItemDescription = skillRow[2];
+        var checklistItemId = getValidId(checklistItemDescription);
+
+		var areaNode = skillsTree.items.find(item => item.id == areaId);
+		if (!areaNode){
+			areaNode = {
+				id: areaId,
+				text: areaName,
+				items: []
+			};
+			skillsTree.items.push(areaNode);
+		}
+		var skillNode = areaNode.items.find(item => item.id == skillId);
+		if (!skillNode){
+			skillNode = {
+				id: skillId,
+				text: skillName,
+				items: []
+			};
+			areaNode.items.push(skillNode);
+		}
+		var checklistItemNode = skillNode.items.find(item => item.id == checklistItemId);
+		if (!checklistItemNode){
+			checklistItemNode = {
+				id: checklistItemId,
+				text: checklistItemDescription,
+			};
+			skillNode.items.push(checklistItemNode);
+		}
+
+    });
+    return skillsTree;
+}
+
+
 app.baseUrl="https://gamecore.itcarlow.ie/ReviewSystemDev"
 	
 onMount(async () => {
@@ -65,6 +115,9 @@ onMount(async () => {
 	//fake data
 	theData = JSON.parse(d)
 	skillsHierarchy = createSkillsHierarchy(theData.skills_table)
+	skillsTree = createSkillsTree(theData.skills_table)
+	console.log(skillsTree);
+	
 });
 
 //Todo use await promise to handle data fetch async
@@ -80,7 +133,9 @@ onMount(async () => {
 <AssignBrief 
 	learners = {theData.learner_names} 
 	reviewers = {theData.reviewer_names}
-	skills = {skillsHierarchy} />
+	skills = {skillsHierarchy} 
+	skillsTree = {skillsTree} 
+	/>
 {/if}
 
 <div id="assign-brief-complete" style="display: none">Your brief has been assigned.  Refresh this page to assign a new brief.</div>
