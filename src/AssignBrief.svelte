@@ -1,6 +1,11 @@
 <script>
 import CheckListSelector from "./Components/CheckListSelector.svelte"
 import TreeView from "./Components/TreeView.svelte";
+import Chip, {
+    Set,
+    TrailingAction,
+    Text
+} from '@smui/chips';
 //import { learner_names, reviewer_names } from './SkillsStore.js';
 //import { skillsTable} from './SkillsStore.js';
 export let learners = [];
@@ -25,7 +30,8 @@ $: {
 
 const addLearner = (learner) => {
     if (learner_names_sorted.indexOf(learner) >= 0) {
-        selected_learners = [...new Set(selected_learners.concat(learner))];
+       // selected_learners = [...new Set(selected_learners.concat(learner))];
+       selected_learners = [...selected_learners, learner];
     }
 }
 
@@ -141,9 +147,12 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
                     <input type="text" id="learners" class="learner" placeholder="Add a learner" required list ="learner-list"
                         on:change="{(e) => addLearner(e.target.value)}">
                     <div>Add a learner to the brief. (You can add multiple learners.)</div>
-                    {#each selected_learners as learner}
-                    <span>{learner + ", "}</span>
-                    {/each}
+                    <Set chips={selected_learners} let:chip input>
+                        <Chip {chip}>
+                            <Text>{chip}</Text>
+                            <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+                        </Chip>
+                    </Set>
                     <datalist id="learner-list">
                         {#each learner_names_sorted as learner}
                         <option>{learner}</option>
@@ -158,7 +167,7 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
                         on:change="{(e) => addReviewer(e.target.value)}">
                     <div>Add a reviewer to the brief. (You can add multiple reviewers.)</div>
                     {#each selected_reviewers as reviewer}
-                        <span>{reviewer + ", "}</span>
+                    <span>{reviewer + ", "}</span>
                     {/each}
                     <datalist id="reviewer-list">
                         {#each reviewer_names_sorted as reviewer}
