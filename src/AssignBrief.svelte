@@ -15,52 +15,24 @@ let assignmentType;
 let selected_reviewers = [];
 let selected_learners = [];
 
-// let treedata = {
-// 	 text: "root",
-
-// 	 items:[
-// 		 {
-// 		text: "test",
-// 		items: [
-// 		{ text: "subtest" },
-// 		{ text: "subtest2" },
-// 		{ text: "subtest3" },
-// 		{ text: "subtest4", 
-// 		items: [
-// 		{ text: "subtest" , selected: false },
-// 		{ text: "subtest2" },
-// 		{ text: "subtest3" },
-// 		{ text: "subtest4" },
-// 		]
-// 		},
-// 		]
-// 		},
-// 		{
-// 		text: "test2",
-// 		items: [
-// 		{ text: "subtest" },
-// 		{ text: "subtest2" },
-// 		{ text: "subtest3" },
-// 		{ text: "subtest4" },
-// 		]
-// 		},
-// 		{
-// 		text: "test3",
-// 		items: [
-// 		{ text: "subtest" },
-// 		{ text: "subtest2" },
-// 		{ text: "subtest3" , selected: true},
-// 		{ text: "subtest4" },
-// 		]
-// 		}
-// ]};
-
 let learner_names_sorted = []
 let reviewer_names_sorted = []
 
 $: {
     learner_names_sorted = learners.sort();
     reviewer_names_sorted = reviewers.sort();
+}
+
+const addLearner = (learner) => {
+    if (learner_names_sorted.indexOf(learner) >= 0) {
+        selected_learners = [...new Set(selected_learners.concat(learner))];
+    }
+}
+
+const addReviewer = (reviewer) => {
+    if (reviewer_names_sorted.indexOf(reviewer) >= 0) {
+        selected_reviewers = [...new Set(selected_reviewers.concat(reviewer))];
+    }
 }
 
 function getChecked() {
@@ -165,19 +137,35 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
             </section>
             <section id="learner">
                 <label for="learner">Assign a learner:</label>
-                <select name="learner" id="learners"  bind:value={selected_learners} multiple required>
-                    {#each learner_names_sorted as learner}
-                    <option>{learner}</option>
+                <div>
+                    <input type="text" id="learners" class="learner" placeholder="Add a learner" required list ="learner-list"
+                        on:change="{(e) => addLearner(e.target.value)}">
+                    <div>Add a learner to the brief. (You can add multiple learners.)</div>
+                    {#each selected_learners as learner}
+                    <span>{learner + ", "}</span>
                     {/each}
-                </select>
+                    <datalist id="learner-list">
+                        {#each learner_names_sorted as learner}
+                        <option>{learner}</option>
+                        {/each}
+                    </datalist>
+                </div>
             </section>
             <section id="reviewer">
                 <label for="learner">Reviewers</label>
-                <select name="reviewers" id="reviewers" bind:value={selected_reviewers} multiple required>
-                    {#each reviewer_names_sorted as reviewer}
-                    <option>{reviewer}</option>
+                <div>
+                    <input type="text" id="reviewers" class="reviewer" placeholder="Add a reviewer" required list ="reviewer-list"
+                        on:change="{(e) => addReviewer(e.target.value)}">
+                    <div>Add a reviewer to the brief. (You can add multiple reviewers.)</div>
+                    {#each selected_reviewers as reviewer}
+                        <span>{reviewer + ", "}</span>
                     {/each}
-                </select>
+                    <datalist id="reviewer-list">
+                        {#each reviewer_names_sorted as reviewer}
+                        <option>{reviewer}</option>
+                        {/each}
+                    </datalist>
+                </div>
             </section>
 
             <section id="deadline">
@@ -206,7 +194,7 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
                         <TreeView branch = {skillsTree} itemClass={""} leafClass={""} selectedClass={"blue"}   expandIfDecendantSelected={true} >
                         </TreeView>
                     </section>
-                    <input id="submit" type="submit" value="Submit">
+                    <input id="submit" type="button" value="Submit">
 
                     </form>
                     </div>
