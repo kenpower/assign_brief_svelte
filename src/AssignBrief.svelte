@@ -275,7 +275,7 @@
                     expandIfDecendantSelected={true}
                 />
             </section>
-            <input id="submit" type="button" value="Submit" />
+            <input id="submit" type="submit" value="Submit" />
         </form>
     </div>
 </div>
