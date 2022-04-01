@@ -27,7 +27,7 @@
     const inListAndNotChoosen = (name, mainList, choosenList) =>
         mainList.indexOf(name) >= 0 && choosenList.indexOf(name) == -1;
 
-    const addLearner = (learner) => {
+    const addLearner = (input, learner) => {
         if (
             inListAndNotChoosen(
                 learner,
@@ -36,9 +36,12 @@
             )
         )
             selected_learners = [...selected_learners, learner];
+        
+        input.value="";
+
     };
 
-    const addReviewer = (reviewer) => {
+    const addReviewer = (input, reviewer) => {
         if (
             inListAndNotChoosen(
                 reviewer,
@@ -46,7 +49,8 @@
                 selected_reviewers
             )
         )
-            selected_reviewers = [...selected_reviewers, reviewer];
+        selected_reviewers = [...selected_reviewers, reviewer];
+        input.value="";
     };
 
     function getChecked() {
@@ -70,7 +74,25 @@
         return listOfTriples;
     }
 
-    function submit() {
+function validateList(inputID, list) {
+  const input = document.getElementById(inputID);
+  const validityState = input.validity;
+
+  if (list.length==0) {
+      console.log(inputID+" list too short")
+      input.setCustomValidity('You gotta fill this out, yo!');
+
+  } else {
+    input.setCustomValidity('');
+  }
+
+  input.reportValidity();
+}
+
+var exemplar_radio = document.getElementById("exemplar");
+//exemplar_radio.setCustomValidity("You need to select a exemplar or brief type");
+
+function submit() {
         console.log("press submit");
         let data = {};
 
@@ -78,10 +100,23 @@
         data.brief_title = brief_title;
         data.upload_url = brief_link;
 
+        exemplar_radio = document.getElementById("exemplar")
+        exemplar_radio.setCustomValidity("");
         if (!assignmentType) {
+            //exemplar_radio.setCustomValidity("You need to select a exemplar or brief type");
+            //exemplar_radio.reportValidity();
             alert("You need to select a exemplar or brief type");
             return;
         }
+
+        //learner_input = document.getElementById("learners")
+        validateList("learners",selected_learners )
+
+        // if(selected_learners.length==0){
+           
+        //     document.getElementById("learners").setCustomValidity('You must select at least one learner');
+        //     alert("You must select at least one learner");
+        // }
 
         data.brief_type = assignmentType;
         data.learners = selected_learners;
@@ -157,6 +192,7 @@
                             name="brief_type"
                             bind:group={assignmentType}
                             value="exemplar"
+                           
                         />
                         Exemplar</label
                     >
@@ -168,6 +204,7 @@
                             name="brief_type"
                             bind:group={assignmentType}
                             value="brief"
+                            
                         />
                         Brief</label
                     >
@@ -211,9 +248,8 @@
                         id="learners"
                         class="learner"
                         placeholder="Add a learner"
-                        required
                         list="learner-list"
-                        on:change={(e) => addLearner(e.target.value)}
+                        on:change={(e) => addLearner(e.target, e.target.value)}
                     />
                     <datalist id="learner-list">
                         {#each learner_names_sorted as learner}
@@ -238,9 +274,8 @@
                         id="reviewers"
                         class="reviewer"
                         placeholder="Add a reviewer"
-                        required
                         list="reviewer-list"
-                        on:change={(e) => addReviewer(e.target.value)}
+                        on:change={(e) => addReviewer(e.target, e.target.value)}
                     />
                     <datalist id="reviewer-list">
                         {#each reviewer_names_sorted as reviewer}
