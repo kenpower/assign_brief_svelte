@@ -24,9 +24,19 @@
         reviewer_names_sorted = reviewers.sort();
     }
 
+    let learnerInput;
+    let reviewerInput;
+    
+    const setValididtyMessage = (el, msg) => el && el.setCustomValidity(msg);
+
+    const validateInput = (input, isValidPred, msg) => () =>  setValididtyMessage(input, isValidPred() ? "" : msg);
+
+    const validateLearnerList = validateInput(learnerInput, () => (selected_learners.length >= 0),  "Please select at least one learner");
+    const validateReviewerList = validateInput(reviewerInput, () => (selected_reviewers.length >= 0),  "Please select at least one reviewer");
+    
     const inListAndNotChoosen = (name, mainList, choosenList) =>
         mainList.indexOf(name) >= 0 && choosenList.indexOf(name) == -1;
-
+   
     const addLearner = (input, learner) => {
         if (
             inListAndNotChoosen(
@@ -37,10 +47,30 @@
         )
             selected_learners = [...selected_learners, learner];
         
+        validateLearnerList();
         input.value="";
 
     };
 
+    const removePerson = (removeAction, validator) => (name) =>{
+        console.log("remove "+name);
+        removeAction(name);
+        validator();
+    }
+
+    const removeLearner = (learner) => removePerson(
+        name => selected_learners = selected_learners.filter(l => l != name),
+        validateLearnerList
+        )(learner);
+
+    const removeReviwer = (reviwer) => removePerson(
+        name => selected_reviwers = selected_reviwers.filter(l => l != name),
+        validatereviwerList
+        )(reviwer);
+
+
+    //todo : make addRevieer * learer a partial function also
+    //handle brieftype validation like learnernsl;ist validation
     const addReviewer = (input, reviewer) => {
         if (
             inListAndNotChoosen(
@@ -51,6 +81,7 @@
         )
         selected_reviewers = [...selected_reviewers, reviewer];
         input.value="";
+        validateReviewerList
     };
 
     function getChecked() {
@@ -74,19 +105,22 @@
         return listOfTriples;
     }
 
-function validateList(inputID, list) {
+function validateListNotEmpty(inputID, list, errorMessage) {
   const input = document.getElementById(inputID);
-  const validityState = input.validity;
 
+  input.setCustomValidity('');
+  var valid = true
   if (list.length==0) {
-      console.log(inputID+" list too short")
-      input.setCustomValidity('You gotta fill this out, yo!');
+      //console.log(inputID+" list too short")
+      //console.dir(input)
+      input.setCustomValidity(errorMessage);
+      valid=false
 
-  } else {
-    input.setCustomValidity('');
-  }
-
+  } 
+  //console.log(inputID+" list too short")
   input.reportValidity();
+
+  return valid;
 }
 
 var exemplar_radio = document.getElementById("exemplar");
@@ -100,18 +134,22 @@ function submit() {
         data.brief_title = brief_title;
         data.upload_url = brief_link;
 
-        exemplar_radio = document.getElementById("exemplar")
-        exemplar_radio.setCustomValidity("");
+        
+        var brief_radio = document.getElementById("brief");
+        console.dir( brief_radio.validity);
+        brief_radio.setCustomValidity("");
         if (!assignmentType) {
-            //exemplar_radio.setCustomValidity("You need to select a exemplar or brief type");
-            //exemplar_radio.reportValidity();
-            alert("You need to select a exemplar or brief type");
+            brief_radio.setCustomValidity("You need to select a exemplar or brief type");
+            brief_radio.reportValidity();
             return;
         }
 
         //learner_input = document.getElementById("learners")
-        validateList("learners",selected_learners )
+        //if(!validateListNotEmpty("learners",selected_learners, 'Need at least one learner' )) return;
 
+        //if(!validateListNotEmpty("reviewers",selected_learners, 'Need at least one reviewer' )) return;
+
+        return;
         // if(selected_learners.length==0){
            
         //     document.getElementById("learners").setCustomValidity('You must select at least one learner');
@@ -172,7 +210,16 @@ function submit() {
         //                 }
         //                console.log(data);
         //             })
+
     }
+
+    const setRadioGroupAsValid = (e)=>{
+        console.dir(e.target);
+        var groupName = e.target.name;
+        var radios = document.getElementsByName( groupName );
+        radios.forEach(r => r.setCustomValidity(""));
+    }
+
 
     const firstDictItemKey = (dict) => Object.keys(dict)[0];
 
@@ -192,7 +239,7 @@ function submit() {
                             name="brief_type"
                             bind:group={assignmentType}
                             value="exemplar"
-                           
+                            on:input={setRadioGroupAsValid}
                         />
                         Exemplar</label
                     >
@@ -204,7 +251,7 @@ function submit() {
                             name="brief_type"
                             bind:group={assignmentType}
                             value="brief"
-                            
+                            on:input={setRadioGroupAsValid}
                         />
                         Brief</label
                     >
@@ -249,6 +296,7 @@ function submit() {
                         class="learner"
                         placeholder="Add a learner"
                         list="learner-list"
+                        bind:this={learnerInput}
                         on:change={(e) => addLearner(e.target, e.target.value)}
                     />
                     <datalist id="learner-list">
@@ -257,7 +305,7 @@ function submit() {
                         {/each}
                     </datalist>
                     <Set chips={selected_learners} let:chip input>
-                        <Chip {chip}>
+                        <Chip {chip}  on:SMUIChip:removal={(e)=>removeLearner(e.detail.chipId)}>
                             <Text>{chip}</Text>
                             <TrailingAction icon$class="material-icons"
                                 >cancel</TrailingAction
@@ -275,6 +323,7 @@ function submit() {
                         class="reviewer"
                         placeholder="Add a reviewer"
                         list="reviewer-list"
+                         bind:this={reviewerInput}
                         on:change={(e) => addReviewer(e.target, e.target.value)}
                     />
                     <datalist id="reviewer-list">
