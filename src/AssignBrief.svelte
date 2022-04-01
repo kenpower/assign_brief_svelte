@@ -178,23 +178,25 @@
                 <input
                     type="text"
                     id="brief-title"
-                    class="brief_title"
+                    size=50
                     bind:value={brief_title}
                     placeholder="Add a title for the brief"
                     required
                 />
+                <span class="validity" />
             </section>
             <section id="drive_link">
                 <label for="attach-brief">Google Drive Link</label>
                 <div>
-                    <input
-                        style="width:100%"
+                    <input class = "extra-wide-input"
                         type="text"
                         bind:value={brief_link}
                         name="attach-brief"
                         id="attach-brief"
+                        size=50
                         required
                     />
+                    <span class="validity" />
                     <div>
                         Add a link to a Google drive folder shared with
                         cleachtas@gmail.com, containing the brief.)
@@ -291,15 +293,21 @@
         max-width: 20%;
     }
 
-    section > input,
-    section > div {
-        flex-grow: 1;
-    }
-
     .input-with-chips {
         display: flex;
     }
 
+    input:invalid + span:after {
+        position: absolute;
+        content: "✖";
+        padding-left: 5px;
+    }
+
+    input:valid + span:after {
+        position: absolute;
+        content: "✓";
+        padding-left: 5px;
+    }
     :global(.blue) {
         color: blue;
         font-weight: 700;
