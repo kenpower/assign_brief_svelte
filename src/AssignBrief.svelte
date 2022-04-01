@@ -28,17 +28,18 @@ $: {
     reviewer_names_sorted = reviewers.sort();
 }
 
+const inListAndNotChoosen = (name, mainList, choosenList)=>
+    (mainList.indexOf(name) >= 0) && (choosenList.indexOf(name) == -1)
+
+
 const addLearner = (learner) => {
-    if (learner_names_sorted.indexOf(learner) >= 0) {
-       // selected_learners = [...new Set(selected_learners.concat(learner))];
+    if(inListAndNotChoosen(learner, learner_names_sorted, selected_learners)) 
        selected_learners = [...selected_learners, learner];
-    }
 }
 
 const addReviewer = (reviewer) => {
-    if (reviewer_names_sorted.indexOf(reviewer) >= 0) {
-        selected_reviewers = [...new Set(selected_reviewers.concat(reviewer))];
-    }
+    if(inListAndNotChoosen(reviewer, reviewer_names_sorted, selected_reviewers)) 
+        selected_reviewers = [...selected_reviewers, reviewer];
 }
 
 function getChecked() {
@@ -59,6 +60,7 @@ function getChecked() {
 }
 
 function submit() {
+    console.log("press submit")
     let data = {}
 
     data.author_email = "";
@@ -130,6 +132,18 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
 <div>
     <div id = "assign-brief" class="outer_shell">
         <form on:submit|preventDefault={submit}>
+            <section id="assignment_type">
+                <label for="submission-datetime">Asignment Type:</label>
+                <div class = radios>
+                    <label class="radio" for="exemplar">
+                        <input type="radio" id="exemplar" name="brief_type" bind:group={assignmentType} value="exemplar"/>
+                        Exemplar</label>
+
+                    <label class="radio" for="brief">
+                        <input type="radio" id="brief" name="brief_type" bind:group={assignmentType} value="brief"/>
+                        Brief</label>
+                </div>
+            </section>
             <section id="title">
                 <label for="brief-title">Brief Title:</label>
                 <input type="text" id="brief-title" class="brief_title" bind:value={brief_title} placeholder="Add a title for the brief" required>
@@ -143,37 +157,39 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
             </section>
             <section id="learner">
                 <label for="learner">Assign a learner:</label>
-                <div>
+                <div class="input-with-chips">
                     <input type="text" id="learners" class="learner" placeholder="Add a learner" required list ="learner-list"
                         on:change="{(e) => addLearner(e.target.value)}">
-                    <div>Add a learner to the brief. (You can add multiple learners.)</div>
+                        <datalist id="learner-list">
+                            {#each learner_names_sorted as learner}
+                            <option>{learner}</option>
+                            {/each}
+                        </datalist>
                     <Set chips={selected_learners} let:chip input>
                         <Chip {chip}>
                             <Text>{chip}</Text>
                             <TrailingAction icon$class="material-icons">cancel</TrailingAction>
                         </Chip>
                     </Set>
-                    <datalist id="learner-list">
-                        {#each learner_names_sorted as learner}
-                        <option>{learner}</option>
-                        {/each}
-                    </datalist>
+
                 </div>
             </section>
             <section id="reviewer">
                 <label for="learner">Reviewers</label>
-                <div>
+                <div class="input-with-chips">
                     <input type="text" id="reviewers" class="reviewer" placeholder="Add a reviewer" required list ="reviewer-list"
                         on:change="{(e) => addReviewer(e.target.value)}">
-                    <div>Add a reviewer to the brief. (You can add multiple reviewers.)</div>
-                    {#each selected_reviewers as reviewer}
-                    <span>{reviewer + ", "}</span>
-                    {/each}
                     <datalist id="reviewer-list">
                         {#each reviewer_names_sorted as reviewer}
                         <option>{reviewer}</option>
                         {/each}
                     </datalist>
+                    <Set chips={selected_reviewers} let:chip input>
+                        <Chip {chip}>
+                            <Text>{chip}</Text>
+                            <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+                        </Chip>
+                    </Set>
                 </div>
             </section>
 
@@ -182,18 +198,6 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
                 <input id="submission-datetime" type="datetime-local">
             </section>
 
-            <section id="assignment_type">
-                <label for="submission-datetime">Asignment Type:</label>
-                <div class = radios>
-                    <label class="radio" for="exemplar">
-                        <input type="radio" id="exemplar" name="brief_type" bind:group={assignmentType} value="exemplar"/>
-                        Exemplar</label>
-
-                    <label class="radio" for="brief">
-                        <input type="radio" id="brief" name="brief_type" bind:group={assignmentType} value="brief"/>
-                        Brief</label>
-                </div>
-            </section>
             <section id="checklist">
                 <label for="">Checklist items</label>
                 <CheckListSelector {skills}/>
@@ -223,6 +227,10 @@ section>label {
 section>input,
 section>div {
     flex-grow: 1;
+}
+
+.input-with-chips{
+    display: flex;
 }
 
 :global(.blue) {
