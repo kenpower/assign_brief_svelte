@@ -88,27 +88,6 @@ function submit() {
         data.final_deadline_time = time;
 
         console.log(data);
-
-                //      fetch(app.baseUrl + '/assign_brief',
-        //          {method:'POST',
-        //              headers:{'Content-Type': 'application/json'},
-        //              body: JSON.stringify(data)})
-        //             .then(response => {
-        //                 if (!response.ok) {
-        //                     app.r = response;
-        //                     response.text().then(t=>alert(t));
-        //                     //alert(response);
-        //                     console.log(response);
-
-        //                 }
-        //                 else
-        //                 {
-        //                     document.getElementById("assign-brief").style.display = "none";
-        //                     document.getElementById("assign-brief-complete").style.display = "block";
-
-        //                 }
-        //                console.log(data);
-        //             })
     }
 
     const setRadioGroupAsValid = ()=>{
