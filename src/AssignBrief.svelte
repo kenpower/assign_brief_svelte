@@ -15,7 +15,7 @@
     let assignmentType;
     let selectedReviewers = [];
     let selectedLearners = [];
-
+    let submissionDatetime
     let learnerNamesSorted = [];
     let reviewerNamesSorted = [];
 
@@ -75,13 +75,7 @@ function submit() {
             selected_checklist_item_triples
         );
 
-        var submissionDatetime = document.getElementById(
-            "submission-datetime"
-        ).value;
-        if (submissionDatetime == "") {
-            alert("You haven't set a submission date!");
-            return;
-        }
+
         let datetime = new Date(submissionDatetime);
         let date = datetime.toLocaleDateString("en-GB");
         let time = datetime.toLocaleTimeString("en-GB");
@@ -226,6 +220,7 @@ function submit() {
                 <label for="submission-datetime">Submission deadline:</label>
                 <input id="submission-datetime" 
                     type="datetime-local" 
+                    bind:value = {submissionDatetime}
                     required/>
                 <span class="validity" />
             </section>
