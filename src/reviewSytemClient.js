@@ -164,6 +164,7 @@ function createSkillsTree(skills) {
       checklistItemNode = {
         id: checklistItemId,
         text: checklistItemDescription,
+        checklist_item_triple: skillRow,
       };
       skillNode.items.push(checklistItemNode);
     }

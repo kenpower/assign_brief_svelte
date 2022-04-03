@@ -48,9 +48,25 @@
         return listOfTriples;
     }
 
+    const getCheckedFromTree = () => {
+        var listOfTriples = [];
+        data = skillsTree;
+
+        data.items.forEach(area =>
+            area.items.forEach(skill =>
+                skill.items.forEach(checklistItem => {
+                    if (checklistItem.selected)
+                        listOfTriples.push(checklistItem.checklist_item_triple);
+                })
+            )
+        );
+
+        console.log(listOfTriples);
+        return listOfTriples;
+    };
+
 
 onMount(()=>exemplar_radio.setCustomValidity("You need to select a exemplar or brief type"))
-
 
 function submit() {
         console.log("press submit");
@@ -64,7 +80,8 @@ function submit() {
         data.learners = selectedLearners;
         data.reviewers = selectedReviewers;
 
-        const selected_checklist_item_triples = getChecked();
+        //const selected_checklist_item_triples = getChecked();
+        const selected_checklist_item_triples = getCheckedFromTree();
 
         if (selected_checklist_item_triples.length == 0) {
             alert("You have to at least one skill selected!");
@@ -90,14 +107,14 @@ function submit() {
         console.log(data);
     }
 
-    const setRadioGroupAsValid = ()=>{
-        exemplar_radio.setCustomValidity("");
-        brief_radio.setCustomValidity("");
-    }
+const setRadioGroupAsValid = ()=>{
+    exemplar_radio.setCustomValidity("");
+    brief_radio.setCustomValidity("");
+}
 
-    const firstDictItemKey = (dict) => Object.keys(dict)[0];
+const firstDictItemKey = (dict) => Object.keys(dict)[0];
 
-    const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
+const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
 </script>
 
 
@@ -216,7 +233,7 @@ function submit() {
                     branch={skillsTree}
                     itemClass={""}
                     leafClass={""}
-                    selectedClass={"blue"}
+                    selectedClass={"checklist-selected"}
                     expandIfDecendantSelected={true}
                 />
             </section>
@@ -253,8 +270,12 @@ function submit() {
         content: "✓";
         padding-left: 5px;
     }
-    :global(.blue) {
-        color: blue;
+    :global(.checklist-selected) {
         font-weight: 700;
+    }
+    :global(.checklist-selected::before) {
+        font-size: 1rem;
+        color: green;
+        content: "✓";
     }
 </style>
