@@ -1,9 +1,10 @@
 <script>
     import CheckListSelector from "./Components/CheckListSelector.svelte";
     import TreeView from "./Components/TreeView.svelte";
+    import InputWithChips from "./Components/InputWithChips.svelte";
     import Chip, { Set, TrailingAction, Text } from "@smui/chips";
-    //import { learner_names, reviewer_names } from './SkillsStore.js';
-    //import { skillsTable} from './SkillsStore.js';
+    
+
     export let learners = [];
     export let reviewers = [];
     export let skills = [];
@@ -13,14 +14,14 @@
     let brief_title;
     let brief_link;
     let assignmentType;
-    let selected_reviewers = [];
-    let selected_learners = [];
+    let selectedReviewers = [];
+    let selectedLearners = [];
 
-    let learner_names_sorted = [];
+    let learnerNamesSorted = [];
     let reviewer_names_sorted = [];
 
     $: {
-        learner_names_sorted = learners.sort();
+        learnerNamesSorted = learners.sort();
         reviewer_names_sorted = reviewers.sort();
     }
 
@@ -31,24 +32,24 @@
 
     const validateInput = (input, isValidPred, msg) => () =>  setValididtyMessage(input, isValidPred() ? "" : msg);
 
-    const validateLearnerList = validateInput(learnerInput, () => (selected_learners.length >= 0),  "Please select at least one learner");
-    const validateReviewerList = validateInput(reviewerInput, () => (selected_reviewers.length >= 0),  "Please select at least one reviewer");
+    const validateLearnerList = validateInput(learnerInput, () => (selectedLearners.length > 0),  "Please select at least one learner");
+    const validateReviewerList = validateInput(reviewerInput, () => (selectedReviewers.length > 0),  "Please select at least one reviewer");
     
     const inListAndNotChoosen = (name, mainList, choosenList) =>
         mainList.indexOf(name) >= 0 && choosenList.indexOf(name) == -1;
    
-    const addLearner = (input, learner) => {
+    const addLearner = (learner) => {
         if (
             inListAndNotChoosen(
                 learner,
-                learner_names_sorted,
-                selected_learners
+                learnerNamesSorted,
+                selectedLearners
             )
         )
-            selected_learners = [...selected_learners, learner];
+            selectedLearners = [...selectedLearners, learner];
         
         validateLearnerList();
-        input.value="";
+        learnerInput.value="";
 
     };
 
@@ -59,15 +60,16 @@
     }
 
     const removeLearner = (learner) => removePerson(
-        name => selected_learners = selected_learners.filter(l => l != name),
+        name => selectedLearners = selectedLearners.filter(n => n != name),
         validateLearnerList
         )(learner);
 
-    const removeReviwer = (reviwer) => removePerson(
-        name => selected_reviwers = selected_reviwers.filter(l => l != name),
-        validatereviwerList
-        )(reviwer);
+    const removeReviewer = (reviewer) => removePerson(
+        name => selectedReviewers = selectedReviewers.filter(n => n != name),
+        validatereviewerList
+        )(reviewer);
 
+     $: console.log(selectedLearners)  ;
 
     //todo : make addRevieer * learer a partial function also
     //handle brieftype validation like learnernsl;ist validation
@@ -76,10 +78,10 @@
             inListAndNotChoosen(
                 reviewer,
                 reviewer_names_sorted,
-                selected_reviewers
+                selectedReviewers
             )
         )
-        selected_reviewers = [...selected_reviewers, reviewer];
+        selectedReviewers = [...selectedReviewers, reviewer];
         input.value="";
         validateReviewerList
     };
@@ -105,29 +107,32 @@
         return listOfTriples;
     }
 
-function validateListNotEmpty(inputID, list, errorMessage) {
-  const input = document.getElementById(inputID);
+// function validateListNotEmpty(inputID, list, errorMessage) {
+//   const input = document.getElementById(inputID);
 
-  input.setCustomValidity('');
-  var valid = true
-  if (list.length==0) {
-      //console.log(inputID+" list too short")
-      //console.dir(input)
-      input.setCustomValidity(errorMessage);
-      valid=false
+//   input.setCustomValidity('');
+//   var valid = true
+//   if (list.length==0) {
+//       //console.log(inputID+" list too short")
+//       //console.dir(input)
+//       input.setCustomValidity(errorMessage);
+//       valid=false
 
-  } 
-  //console.log(inputID+" list too short")
-  input.reportValidity();
+//   } 
+//   //console.log(inputID+" list too short")
+//   input.reportValidity();
 
-  return valid;
-}
+//   return valid;
+// }
 
 var exemplar_radio = document.getElementById("exemplar");
 //exemplar_radio.setCustomValidity("You need to select a exemplar or brief type");
 
 function submit() {
         console.log("press submit");
+        
+        console.log(selectedLearners);
+        return;
         let data = {};
 
         data.author_email = "";
@@ -136,7 +141,7 @@ function submit() {
 
         
         var brief_radio = document.getElementById("brief");
-        console.dir( brief_radio.validity);
+
         brief_radio.setCustomValidity("");
         if (!assignmentType) {
             brief_radio.setCustomValidity("You need to select a exemplar or brief type");
@@ -157,8 +162,8 @@ function submit() {
         // }
 
         data.brief_type = assignmentType;
-        data.learners = selected_learners;
-        data.reviewers = selected_reviewers;
+        data.learners = selectedLearners;
+        data.reviewers = selectedReviewers;
 
         const selected_checklist_item_triples = getChecked();
 
@@ -226,9 +231,17 @@ function submit() {
     const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
 </script>
 
+
 <div>
     <div id="assign-brief" class="outer_shell">
         <form on:submit|preventDefault={submit}>
+            {#if true}
+            <InputWithChips 
+                data = {learnerNamesSorted} 
+                placeholder = "Add a learner"
+                validationMessage = "Please select at least one learner"
+                bind:selectedItems = {selectedLearners} />
+            {:else}
             <section id="assignment_type">
                 <label for="submission-datetime">Asignment Type:</label>
                 <div class="radios">
@@ -297,14 +310,14 @@ function submit() {
                         placeholder="Add a learner"
                         list="learner-list"
                         bind:this={learnerInput}
-                        on:change={(e) => addLearner(e.target, e.target.value)}
+                        on:change={(e) => addLearner(e.target.value)}
                     />
                     <datalist id="learner-list">
-                        {#each learner_names_sorted as learner}
+                        {#each learnerNamesSorted as learner}
                             <option>{learner}</option>
                         {/each}
                     </datalist>
-                    <Set chips={selected_learners} let:chip input>
+                    <Set chips={selectedLearners} let:chip input>
                         <Chip {chip}  on:SMUIChip:removal={(e)=>removeLearner(e.detail.chipId)}>
                             <Text>{chip}</Text>
                             <TrailingAction icon$class="material-icons"
@@ -324,14 +337,14 @@ function submit() {
                         placeholder="Add a reviewer"
                         list="reviewer-list"
                          bind:this={reviewerInput}
-                        on:change={(e) => addReviewer(e.target, e.target.value)}
+                        on:change={(e) => addReviewer(e.target.value)}
                     />
                     <datalist id="reviewer-list">
                         {#each reviewer_names_sorted as reviewer}
                             <option>{reviewer}</option>
                         {/each}
                     </datalist>
-                    <Set chips={selected_reviewers} let:chip input>
+                    <Set chips={selectedReviewers} let:chip input>
                         <Chip {chip}>
                             <Text>{chip}</Text>
                             <TrailingAction icon$class="material-icons"
@@ -361,6 +374,7 @@ function submit() {
                     expandIfDecendantSelected={true}
                 />
             </section>
+            {/if}
             <input id="submit" type="submit" value="Submit" />
         </form>
     </div>
@@ -377,18 +391,20 @@ function submit() {
         max-width: 20%;
     }
 
-    .input-with-chips {
+    :global(.input-with-chips) {
         display: flex;
     }
 
-    input:invalid + span:after {
-        position: absolute;
+    :global(input:invalid + span:after) {
+        font-size: 2rem;
+        color: red;
         content: "✖";
         padding-left: 5px;
     }
 
-    input:valid + span:after {
-        position: absolute;
+     :global(input:valid + span:after) {
+        font-size: 2rem;
+        color: green;
         content: "✓";
         padding-left: 5px;
     }
