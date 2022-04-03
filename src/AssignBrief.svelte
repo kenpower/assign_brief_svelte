@@ -2,8 +2,7 @@
     import CheckListSelector from "./Components/CheckListSelector.svelte";
     import TreeView from "./Components/TreeView.svelte";
     import InputWithChips from "./Components/InputWithChips.svelte";
-    import Chip, { Set, TrailingAction, Text } from "@smui/chips";
-    
+    import { onMount } from 'svelte';
 
     export let learners = [];
     export let reviewers = [];
@@ -18,73 +17,15 @@
     let selectedLearners = [];
 
     let learnerNamesSorted = [];
-    let reviewer_names_sorted = [];
+    let reviewerNamesSorted = [];
+
+    let exemplar_radio;
+    let brief_radio;
 
     $: {
         learnerNamesSorted = learners.sort();
-        reviewer_names_sorted = reviewers.sort();
+        reviewerNamesSorted = reviewers.sort();
     }
-
-    let learnerInput;
-    let reviewerInput;
-    
-    const setValididtyMessage = (el, msg) => el && el.setCustomValidity(msg);
-
-    const validateInput = (input, isValidPred, msg) => () =>  setValididtyMessage(input, isValidPred() ? "" : msg);
-
-    const validateLearnerList = validateInput(learnerInput, () => (selectedLearners.length > 0),  "Please select at least one learner");
-    const validateReviewerList = validateInput(reviewerInput, () => (selectedReviewers.length > 0),  "Please select at least one reviewer");
-    
-    const inListAndNotChoosen = (name, mainList, choosenList) =>
-        mainList.indexOf(name) >= 0 && choosenList.indexOf(name) == -1;
-   
-    const addLearner = (learner) => {
-        if (
-            inListAndNotChoosen(
-                learner,
-                learnerNamesSorted,
-                selectedLearners
-            )
-        )
-            selectedLearners = [...selectedLearners, learner];
-        
-        validateLearnerList();
-        learnerInput.value="";
-
-    };
-
-    const removePerson = (removeAction, validator) => (name) =>{
-        console.log("remove "+name);
-        removeAction(name);
-        validator();
-    }
-
-    const removeLearner = (learner) => removePerson(
-        name => selectedLearners = selectedLearners.filter(n => n != name),
-        validateLearnerList
-        )(learner);
-
-    const removeReviewer = (reviewer) => removePerson(
-        name => selectedReviewers = selectedReviewers.filter(n => n != name),
-        validatereviewerList
-        )(reviewer);
-
-     $: console.log(selectedLearners)  ;
-
-    //todo : make addRevieer * learer a partial function also
-    //handle brieftype validation like learnernsl;ist validation
-    const addReviewer = (input, reviewer) => {
-        if (
-            inListAndNotChoosen(
-                reviewer,
-                reviewer_names_sorted,
-                selectedReviewers
-            )
-        )
-        selectedReviewers = [...selectedReviewers, reviewer];
-        input.value="";
-        validateReviewerList
-    };
 
     function getChecked() {
         var listOfTriples = [];
@@ -107,60 +48,18 @@
         return listOfTriples;
     }
 
-// function validateListNotEmpty(inputID, list, errorMessage) {
-//   const input = document.getElementById(inputID);
 
-//   input.setCustomValidity('');
-//   var valid = true
-//   if (list.length==0) {
-//       //console.log(inputID+" list too short")
-//       //console.dir(input)
-//       input.setCustomValidity(errorMessage);
-//       valid=false
+onMount(()=>exemplar_radio.setCustomValidity("You need to select a exemplar or brief type"))
 
-//   } 
-//   //console.log(inputID+" list too short")
-//   input.reportValidity();
-
-//   return valid;
-// }
-
-var exemplar_radio = document.getElementById("exemplar");
-//exemplar_radio.setCustomValidity("You need to select a exemplar or brief type");
 
 function submit() {
         console.log("press submit");
         
-        console.log(selectedLearners);
-        return;
         let data = {};
 
         data.author_email = "";
         data.brief_title = brief_title;
         data.upload_url = brief_link;
-
-        
-        var brief_radio = document.getElementById("brief");
-
-        brief_radio.setCustomValidity("");
-        if (!assignmentType) {
-            brief_radio.setCustomValidity("You need to select a exemplar or brief type");
-            brief_radio.reportValidity();
-            return;
-        }
-
-        //learner_input = document.getElementById("learners")
-        //if(!validateListNotEmpty("learners",selected_learners, 'Need at least one learner' )) return;
-
-        //if(!validateListNotEmpty("reviewers",selected_learners, 'Need at least one reviewer' )) return;
-
-        return;
-        // if(selected_learners.length==0){
-           
-        //     document.getElementById("learners").setCustomValidity('You must select at least one learner');
-        //     alert("You must select at least one learner");
-        // }
-
         data.brief_type = assignmentType;
         data.learners = selectedLearners;
         data.reviewers = selectedReviewers;
@@ -195,7 +94,8 @@ function submit() {
         data.final_deadline_time = time;
 
         console.log(data);
-        //      fetch(app.baseUrl + '/assign_brief',
+
+                //      fetch(app.baseUrl + '/assign_brief',
         //          {method:'POST',
         //              headers:{'Content-Type': 'application/json'},
         //              body: JSON.stringify(data)})
@@ -215,16 +115,12 @@ function submit() {
         //                 }
         //                console.log(data);
         //             })
-
     }
 
-    const setRadioGroupAsValid = (e)=>{
-        console.dir(e.target);
-        var groupName = e.target.name;
-        var radios = document.getElementsByName( groupName );
-        radios.forEach(r => r.setCustomValidity(""));
+    const setRadioGroupAsValid = ()=>{
+        exemplar_radio.setCustomValidity("");
+        brief_radio.setCustomValidity("");
     }
-
 
     const firstDictItemKey = (dict) => Object.keys(dict)[0];
 
@@ -235,13 +131,8 @@ function submit() {
 <div>
     <div id="assign-brief" class="outer_shell">
         <form on:submit|preventDefault={submit}>
-            {#if true}
-            <InputWithChips 
-                data = {learnerNamesSorted} 
-                placeholder = "Add a learner"
-                validationMessage = "Please select at least one learner"
-                bind:selectedItems = {selectedLearners} />
-            {:else}
+
+
             <section id="assignment_type">
                 <label for="submission-datetime">Asignment Type:</label>
                 <div class="radios">
@@ -251,18 +142,19 @@ function submit() {
                             id="exemplar"
                             name="brief_type"
                             bind:group={assignmentType}
+                            bind:this={exemplar_radio}
                             value="exemplar"
                             on:input={setRadioGroupAsValid}
                         />
                         Exemplar</label
                     >
-
                     <label class="radio" for="brief">
                         <input
                             type="radio"
                             id="brief"
                             name="brief_type"
                             bind:group={assignmentType}
+                            bind:this={brief_radio}
                             value="brief"
                             on:input={setRadioGroupAsValid}
                         />
@@ -270,6 +162,8 @@ function submit() {
                     >
                 </div>
             </section>
+
+
             <section id="title">
                 <label for="brief-title">Brief Title:</label>
                 <input
@@ -282,6 +176,8 @@ function submit() {
                 />
                 <span class="validity" />
             </section>
+
+
             <section id="drive_link">
                 <label for="attach-brief">Google Drive Link</label>
                 <div>
@@ -300,70 +196,46 @@ function submit() {
                     </div>
                 </div>
             </section>
+
+
             <section id="learner">
                 <label for="learner">Assign a learner:</label>
                 <div class="input-with-chips">
-                    <input
-                        type="text"
-                        id="learners"
-                        class="learner"
-                        placeholder="Add a learner"
-                        list="learner-list"
-                        bind:this={learnerInput}
-                        on:change={(e) => addLearner(e.target.value)}
-                    />
-                    <datalist id="learner-list">
-                        {#each learnerNamesSorted as learner}
-                            <option>{learner}</option>
-                        {/each}
-                    </datalist>
-                    <Set chips={selectedLearners} let:chip input>
-                        <Chip {chip}  on:SMUIChip:removal={(e)=>removeLearner(e.detail.chipId)}>
-                            <Text>{chip}</Text>
-                            <TrailingAction icon$class="material-icons"
-                                >cancel</TrailingAction
-                            >
-                        </Chip>
-                    </Set>
-                </div>
-            </section>
-            <section id="reviewer">
-                <label for="learner">Reviewers</label>
-                <div class="input-with-chips">
-                    <input
-                        type="text"
-                        id="reviewers"
-                        class="reviewer"
-                        placeholder="Add a reviewer"
-                        list="reviewer-list"
-                         bind:this={reviewerInput}
-                        on:change={(e) => addReviewer(e.target.value)}
-                    />
-                    <datalist id="reviewer-list">
-                        {#each reviewer_names_sorted as reviewer}
-                            <option>{reviewer}</option>
-                        {/each}
-                    </datalist>
-                    <Set chips={selectedReviewers} let:chip input>
-                        <Chip {chip}>
-                            <Text>{chip}</Text>
-                            <TrailingAction icon$class="material-icons"
-                                >cancel</TrailingAction
-                            >
-                        </Chip>
-                    </Set>
+                    <InputWithChips 
+                        placeholder = "Add a learner"
+                        validationMessage = "Please select at least one learner"
+                        bind:selectedItems = {selectedLearners} 
+                        data = {learnerNamesSorted} />
                 </div>
             </section>
 
+
+            <section id="reviewer">
+                <label for="learner">Reviewers</label>
+                <div class="input-with-chips">
+                    <InputWithChips 
+                        placeholder = "Add a reviewer"
+                        validationMessage = "Please select at least one reviwer"
+                        bind:selectedItems = {selectedReviewers} 
+                        data = {reviewerNamesSorted} />
+                </div>
+            </section>
+
+
             <section id="deadline">
                 <label for="submission-datetime">Submission deadline:</label>
-                <input id="submission-datetime" type="datetime-local" />
+                <input id="submission-datetime" 
+                    type="datetime-local" 
+                    required/>
+                <span class="validity" />
             </section>
 
             <section id="checklist">
                 <label for="">Checklist items</label>
                 <CheckListSelector {skills} />
             </section>
+
+
             <section id="checklist">
                 <label for="">Checklist items</label>
                 <TreeView
@@ -374,7 +246,6 @@ function submit() {
                     expandIfDecendantSelected={true}
                 />
             </section>
-            {/if}
             <input id="submit" type="submit" value="Submit" />
         </form>
     </div>
