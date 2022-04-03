@@ -1844,7 +1844,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (101:1) {#if shouldShowRoot()}
+    // (94:0) {#if shouldShowRoot()}
     function create_if_block_1$2(ctx) {
     	let div;
     	let svgicon;
@@ -1867,8 +1867,8 @@ var app = (function () {
     			create_component(svgicon.$$.fragment);
     			t0 = space();
     			t1 = text(t1_value);
-    			attr_dev(div, "class", div_class_value = "" + (null_to_empty(/*thisItemClasses*/ ctx[2]) + " svelte-1dft6r6"));
-    			add_location(div, file$9, 101, 2, 2341);
+    			attr_dev(div, "class", div_class_value = "" + (null_to_empty(/*thisItemClasses*/ ctx[2]) + " svelte-1mv54pj"));
+    			add_location(div, file$9, 94, 2, 2423);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -1888,7 +1888,7 @@ var app = (function () {
     			svgicon.$set(svgicon_changes);
     			if ((!current || dirty & /*branch*/ 1) && t1_value !== (t1_value = /*branch*/ ctx[0].text + "")) set_data_dev(t1, t1_value);
 
-    			if (!current || dirty & /*thisItemClasses*/ 4 && div_class_value !== (div_class_value = "" + (null_to_empty(/*thisItemClasses*/ ctx[2]) + " svelte-1dft6r6"))) {
+    			if (!current || dirty & /*thisItemClasses*/ 4 && div_class_value !== (div_class_value = "" + (null_to_empty(/*thisItemClasses*/ ctx[2]) + " svelte-1mv54pj"))) {
     				attr_dev(div, "class", div_class_value);
     			}
     		},
@@ -1913,14 +1913,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$2.name,
     		type: "if",
-    		source: "(101:1) {#if shouldShowRoot()}",
+    		source: "(94:0) {#if shouldShowRoot()}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (107:1) {#if !isLeaf() && branch.expanded}
+    // (101:2) {#if !isLeaf() && branch.expanded}
     function create_if_block$3(ctx) {
     	let each_1_anchor;
     	let current;
@@ -2009,14 +2009,14 @@ var app = (function () {
     		block,
     		id: create_if_block$3.name,
     		type: "if",
-    		source: "(107:1) {#if !isLeaf() && branch.expanded}",
+    		source: "(101:2) {#if !isLeaf() && branch.expanded}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (108:2) {#each branch.items as item}
+    // (102:4) {#each branch.items as item}
     function create_each_block$2(ctx) {
     	let treeview;
     	let current;
@@ -2073,7 +2073,7 @@ var app = (function () {
     		block,
     		id: create_each_block$2.name,
     		type: "each",
-    		source: "(108:2) {#each branch.items as item}",
+    		source: "(102:4) {#each branch.items as item}",
     		ctx
     	});
 
@@ -2095,9 +2095,9 @@ var app = (function () {
     			t = space();
     			div = element("div");
     			if (if_block1) if_block1.c();
-    			attr_dev(div, "class", "svelte-1dft6r6");
+    			attr_dev(div, "class", "svelte-1mv54pj");
     			toggle_class(div, "sub-group", /*shouldShowRoot*/ ctx[7]());
-    			add_location(div, file$9, 105, 1, 2460);
+    			add_location(div, file$9, 99, 0, 2545);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2292,7 +2292,7 @@ var app = (function () {
     	$$self.$$.update = () => {
     		if ($$self.$$.dirty & /*itemClass, leafClass, branch, selectedClass*/ 3585) {
     			{
-    				$$invalidate(2, thisItemClasses = "itemBox " + itemClass + (isLeaf() ? ' ' + leafClass : '') + (branch.selected ? ' ' + selectedClass : ''));
+    				$$invalidate(2, thisItemClasses = "itemBox " + itemClass + (isLeaf() ? " " + leafClass : "") + (branch.selected ? " " + selectedClass : ""));
     			}
     		}
 
@@ -9836,7 +9836,7 @@ var app = (function () {
     				branch: /*skillsTree*/ ctx[1],
     				itemClass: "",
     				leafClass: "",
-    				selectedClass: "blue",
+    				selectedClass: "checklist-selected",
     				expandIfDecendantSelected: true
     			},
     			$$inline: true
@@ -9916,113 +9916,113 @@ var app = (function () {
     			t31 = space();
     			input5 = element("input");
     			attr_dev(label0, "for", "submission-datetime");
-    			attr_dev(label0, "class", "svelte-1947jta");
-    			add_location(label0, file$1, 109, 16, 3175);
+    			attr_dev(label0, "class", "svelte-1eondf8");
+    			add_location(label0, file$1, 126, 16, 3716);
     			attr_dev(input0, "type", "radio");
     			attr_dev(input0, "id", "exemplar");
     			attr_dev(input0, "name", "brief_type");
     			input0.__value = "exemplar";
     			input0.value = input0.__value;
     			/*$$binding_groups*/ ctx[17][0].push(input0);
-    			add_location(input0, file$1, 112, 24, 3353);
+    			add_location(input0, file$1, 129, 24, 3894);
     			attr_dev(label1, "class", "radio");
     			attr_dev(label1, "for", "exemplar");
-    			add_location(label1, file$1, 111, 20, 3291);
+    			add_location(label1, file$1, 128, 20, 3832);
     			attr_dev(input1, "type", "radio");
     			attr_dev(input1, "id", "brief");
     			attr_dev(input1, "name", "brief_type");
     			input1.__value = "brief";
     			input1.value = input1.__value;
     			/*$$binding_groups*/ ctx[17][0].push(input1);
-    			add_location(input1, file$1, 124, 24, 3884);
+    			add_location(input1, file$1, 141, 24, 4425);
     			attr_dev(label2, "class", "radio");
     			attr_dev(label2, "for", "brief");
-    			add_location(label2, file$1, 123, 20, 3825);
+    			add_location(label2, file$1, 140, 20, 4366);
     			attr_dev(div0, "class", "radios");
-    			add_location(div0, file$1, 110, 16, 3249);
+    			add_location(div0, file$1, 127, 16, 3790);
     			attr_dev(section0, "id", "assignment_type");
-    			attr_dev(section0, "class", "svelte-1947jta");
-    			add_location(section0, file$1, 108, 12, 3127);
+    			attr_dev(section0, "class", "svelte-1eondf8");
+    			add_location(section0, file$1, 125, 12, 3668);
     			attr_dev(label3, "for", "brief-title");
-    			attr_dev(label3, "class", "svelte-1947jta");
-    			add_location(label3, file$1, 140, 16, 4426);
+    			attr_dev(label3, "class", "svelte-1eondf8");
+    			add_location(label3, file$1, 157, 16, 4967);
     			attr_dev(input2, "type", "text");
     			attr_dev(input2, "id", "brief-title");
     			attr_dev(input2, "size", "50");
     			attr_dev(input2, "placeholder", "Add a title for the brief");
     			input2.required = true;
-    			add_location(input2, file$1, 141, 16, 4489);
+    			add_location(input2, file$1, 158, 16, 5030);
     			attr_dev(span0, "class", "validity");
-    			add_location(span0, file$1, 149, 16, 4770);
+    			add_location(span0, file$1, 166, 16, 5311);
     			attr_dev(section1, "id", "title");
-    			attr_dev(section1, "class", "svelte-1947jta");
-    			add_location(section1, file$1, 139, 12, 4388);
+    			attr_dev(section1, "class", "svelte-1eondf8");
+    			add_location(section1, file$1, 156, 12, 4929);
     			attr_dev(label4, "for", "attach-brief");
-    			attr_dev(label4, "class", "svelte-1947jta");
-    			add_location(label4, file$1, 154, 16, 4880);
+    			attr_dev(label4, "class", "svelte-1eondf8");
+    			add_location(label4, file$1, 171, 16, 5421);
     			attr_dev(input3, "class", "extra-wide-input");
     			attr_dev(input3, "type", "text");
     			attr_dev(input3, "name", "attach-brief");
     			attr_dev(input3, "id", "attach-brief");
     			attr_dev(input3, "size", "50");
     			input3.required = true;
-    			add_location(input3, file$1, 156, 20, 4976);
+    			add_location(input3, file$1, 173, 20, 5517);
     			attr_dev(span1, "class", "validity");
-    			add_location(span1, file$1, 164, 20, 5296);
-    			add_location(div1, file$1, 165, 20, 5343);
-    			add_location(div2, file$1, 155, 16, 4949);
+    			add_location(span1, file$1, 181, 20, 5837);
+    			add_location(div1, file$1, 182, 20, 5884);
+    			add_location(div2, file$1, 172, 16, 5490);
     			attr_dev(section2, "id", "drive_link");
-    			attr_dev(section2, "class", "svelte-1947jta");
-    			add_location(section2, file$1, 153, 12, 4837);
+    			attr_dev(section2, "class", "svelte-1eondf8");
+    			add_location(section2, file$1, 170, 12, 5378);
     			attr_dev(label5, "for", "learner");
-    			attr_dev(label5, "class", "svelte-1947jta");
-    			add_location(label5, file$1, 174, 16, 5624);
+    			attr_dev(label5, "class", "svelte-1eondf8");
+    			add_location(label5, file$1, 191, 16, 6165);
     			attr_dev(div3, "class", "input-with-chips");
-    			add_location(div3, file$1, 175, 16, 5688);
+    			add_location(div3, file$1, 192, 16, 6229);
     			attr_dev(section3, "id", "learner");
-    			attr_dev(section3, "class", "svelte-1947jta");
-    			add_location(section3, file$1, 173, 12, 5584);
+    			attr_dev(section3, "class", "svelte-1eondf8");
+    			add_location(section3, file$1, 190, 12, 6125);
     			attr_dev(label6, "for", "learner");
-    			attr_dev(label6, "class", "svelte-1947jta");
-    			add_location(label6, file$1, 186, 16, 6122);
+    			attr_dev(label6, "class", "svelte-1eondf8");
+    			add_location(label6, file$1, 203, 16, 6663);
     			attr_dev(div4, "class", "input-with-chips");
-    			add_location(div4, file$1, 187, 16, 6178);
+    			add_location(div4, file$1, 204, 16, 6719);
     			attr_dev(section4, "id", "reviewer");
-    			attr_dev(section4, "class", "svelte-1947jta");
-    			add_location(section4, file$1, 185, 12, 6081);
+    			attr_dev(section4, "class", "svelte-1eondf8");
+    			add_location(section4, file$1, 202, 12, 6622);
     			attr_dev(label7, "for", "submission-datetime");
-    			attr_dev(label7, "class", "svelte-1947jta");
-    			add_location(label7, file$1, 198, 16, 6615);
+    			attr_dev(label7, "class", "svelte-1eondf8");
+    			add_location(label7, file$1, 215, 16, 7156);
     			attr_dev(input4, "id", "submission-datetime");
     			attr_dev(input4, "type", "datetime-local");
     			input4.required = true;
-    			add_location(input4, file$1, 199, 16, 6694);
+    			add_location(input4, file$1, 216, 16, 7235);
     			attr_dev(span2, "class", "validity");
-    			add_location(span2, file$1, 203, 16, 6875);
+    			add_location(span2, file$1, 220, 16, 7416);
     			attr_dev(section5, "id", "deadline");
-    			attr_dev(section5, "class", "svelte-1947jta");
-    			add_location(section5, file$1, 197, 12, 6574);
+    			attr_dev(section5, "class", "svelte-1eondf8");
+    			add_location(section5, file$1, 214, 12, 7115);
     			attr_dev(label8, "for", "");
-    			attr_dev(label8, "class", "svelte-1947jta");
-    			add_location(label8, file$1, 207, 16, 6982);
+    			attr_dev(label8, "class", "svelte-1eondf8");
+    			add_location(label8, file$1, 224, 16, 7523);
     			attr_dev(section6, "id", "checklist");
-    			attr_dev(section6, "class", "svelte-1947jta");
-    			add_location(section6, file$1, 206, 12, 6940);
+    			attr_dev(section6, "class", "svelte-1eondf8");
+    			add_location(section6, file$1, 223, 12, 7481);
     			attr_dev(label9, "for", "");
-    			attr_dev(label9, "class", "svelte-1947jta");
-    			add_location(label9, file$1, 213, 16, 7151);
+    			attr_dev(label9, "class", "svelte-1eondf8");
+    			add_location(label9, file$1, 230, 16, 7692);
     			attr_dev(section7, "id", "checklist");
-    			attr_dev(section7, "class", "svelte-1947jta");
-    			add_location(section7, file$1, 212, 12, 7109);
+    			attr_dev(section7, "class", "svelte-1eondf8");
+    			add_location(section7, file$1, 229, 12, 7650);
     			attr_dev(input5, "id", "submit");
     			attr_dev(input5, "type", "submit");
     			input5.value = "Submit";
-    			add_location(input5, file$1, 222, 12, 7484);
-    			add_location(form, file$1, 105, 8, 3069);
+    			add_location(input5, file$1, 239, 12, 8039);
+    			add_location(form, file$1, 122, 8, 3610);
     			attr_dev(div5, "id", "assign-brief");
     			attr_dev(div5, "class", "outer_shell");
-    			add_location(div5, file$1, 104, 4, 3016);
-    			add_location(div6, file$1, 103, 0, 3005);
+    			add_location(div5, file$1, 121, 4, 3557);
+    			add_location(div6, file$1, 120, 0, 3546);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -10235,6 +10235,18 @@ var app = (function () {
     		return listOfTriples;
     	}
 
+    	const getCheckedFromTree = () => {
+    		var listOfTriples = [];
+    		data = skillsTree;
+
+    		data.items.forEach(area => area.items.forEach(skill => skill.items.forEach(checklistItem => {
+    			if (checklistItem.selected) listOfTriples.push(checklistItem.checklist_item_triple);
+    		})));
+
+    		console.log(listOfTriples);
+    		return listOfTriples;
+    	};
+
     	onMount(() => exemplar_radio.setCustomValidity("You need to select a exemplar or brief type"));
 
     	function submit() {
@@ -10246,7 +10258,9 @@ var app = (function () {
     		data.brief_type = assignmentType;
     		data.learners = selectedLearners;
     		data.reviewers = selectedReviewers;
-    		const selected_checklist_item_triples = getChecked();
+
+    		//const selected_checklist_item_triples = getChecked();
+    		const selected_checklist_item_triples = getCheckedFromTree();
 
     		if (selected_checklist_item_triples.length == 0) {
     			alert("You have to at least one skill selected!");
@@ -10358,6 +10372,7 @@ var app = (function () {
     		exemplar_radio,
     		brief_radio,
     		getChecked,
+    		getCheckedFromTree,
     		submit,
     		setRadioGroupAsValid,
     		firstDictItemKey,
@@ -10594,6 +10609,7 @@ var app = (function () {
           checklistItemNode = {
             id: checklistItemId,
             text: checklistItemDescription,
+            checklist_item_triple: skillRow,
           };
           skillNode.items.push(checklistItemNode);
         }
