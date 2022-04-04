@@ -237,7 +237,14 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
                     expandIfDecendantSelected={true}
                 />
             </section>
-            <input id="submit" type="submit" value="Submit" />
+            <section>
+                <label for=""></label>
+                    <button type="submit" class="button">
+                        Submit
+                    </button>
+                
+            </section>
+
         </form>
     </div>
 </div>
@@ -246,11 +253,15 @@ const firstDictItem = (dict) => dict[firstDictItemKey(dict)];
     section {
         padding-bottom: 20px;
         display: flex;
+        align-items: baseline;
+
     }
 
     section > label {
-        min-width: 20%;
-        max-width: 20%;
+        min-width: 12rem;
+        max-width: 12rem;
+        text-align: right;
+        padding-right: 1rem;
     }
 
     :global(.input-with-chips) {
